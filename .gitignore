@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
+outputs/
+data/no upload
+processed_data/no upload
+scripts/no upload
