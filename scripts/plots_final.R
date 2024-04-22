@@ -184,7 +184,7 @@ CC
 DE"
 fig2patch <- growthp1 + growthn1 + dredgeplot + seagrassnpgam + phytonplinear + plot_layout(design = layout)
 
-ggsave(filename = "Fig2.tiff", path="outputs", plot=fig2patch, device = "tiff", width = 15, height = 20, units="in", dpi=300)
+ggsave(filename = "Fig2.jpeg", path="outputs", plot=fig2patch, device = "jpeg", width = 15, height = 20, units="in", dpi=300)
 
 
 ##Figure 3 ------------
@@ -279,7 +279,7 @@ fig3 <- ggpubr::ggarrange(seagrassinterpplot, phytointerpplot,
                           ncol = 2, nrow = 1,
                           font.label = list(size = 20))
 
-ggsave(filename = "Fig3.tiff", path="outputs", plot=fig3, device = "tiff", width = 12.5, height = 7, units="in", dpi=300)
+ggsave(filename = "Fig3.jpeg", path="outputs", plot=fig3, device = "jpeg", width = 12.5, height = 7, units="in", dpi=300)
 
 
 
