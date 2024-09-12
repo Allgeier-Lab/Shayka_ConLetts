@@ -122,7 +122,7 @@ dredgeplot <- ggplot() +
   geom_col(aes(x=modelfactor, y=weight, fill=Model), data=dredgeweights,
            position = position_dodge(), show.legend = FALSE) +
   theme_classic() +
-  scale_x_discrete(labels=c("NxP"="N x P","ExptxNP"="Expt x NP","ExptxN"="Expt x N","ExptxP"="Expt x N","ExptxNxP"="Expt x N x P")) +
+  scale_x_discrete(labels=c("NxP"="N x P","ExptxNP"="Expt x NP","ExptxN"="Expt x N","ExptxP"="Expt x P","ExptxNxP"="Expt x N x P")) +
   scale_fill_manual(values = c("Full" = "#BEBEBE", "Seagrass" = "#b2df8a", "Phytoplankton" = "#1f78b4"),
                     labels=c('Full model', 'Seagrass only', 'Phytoplankton only')) +
   labs(x= "Model Factor",
