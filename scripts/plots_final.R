@@ -126,7 +126,7 @@ dredgeplot <- ggplot() +
   scale_fill_manual(values = c("Full" = "#BEBEBE", "Seagrass" = "#b2df8a", "Phytoplankton" = "#1f78b4"),
                     labels=c('Full model', 'Seagrass only', 'Phytoplankton only')) +
   labs(x= "Model Factor",
-       y= "Weight",
+       y= "Weighted importance",
        color= "Experiment",
        fill = "Experiment",
        tag = "(c)") +
@@ -149,7 +149,7 @@ seagrassnpgam <- ggplot(seagrassgrowth, aes(np, growth)) +
   draw_image(seagrassimg, x=145, y=0.00141, halign = 0, valign=0, scale = 12) +
   geom_smooth(method = "gam", formula = y ~ s(x), fill="#b2df8a", alpha=0.1, color="#b2df8a") + #this fits a gam line instead of the default loess
   labs(x= "N:P",
-       y= expression('Seagrass growth ('*g~shoot^-1~d^-1*')'),
+       y= expression('Seagrass growth ('*g~DW~shoot^-1~d^-1*')'),
        color= "Experiment",
        tag = "(d)") +
   theme(panel.border = element_rect(colour = "black", fill=NA)) +
@@ -167,7 +167,7 @@ phytonplinear <- ggplot(phytogrowth, aes(np, growth)) +
   draw_image(phytoimg, x=90, y=0.0031, halign = 0, valign=0, scale = 18) +
   geom_smooth(method = "lm", fill="#1f78b4", alpha=0.1, color="#1f78b4") + #this fits a linear line instead of the default loess
   labs(x= "N:P",
-       y= expression('Phytoplankton growth ('*mu*g~L^-1~hr^-1*')'),
+       y= expression('Phytoplankton growth ('*mu*g~FW~L^-1~hr^-1*')'),
        color= "Experiment",
        tag = "(e)") +
   theme(panel.border = element_rect(colour = "black", fill=NA)) +
@@ -208,7 +208,7 @@ seagrassinterpplot <- ggplot() +
   theme_classic() +
   labs(x= expression('P ('*g~m^-2~d^-1*')'),
        y= expression('N ('*g~m^-2~d^-1*')'),
-       fill = expression('Seagrass growth rate ('*g~shoot^-1~d^-1*')'),
+       fill = expression('Seagrass growth rate ('*g~DW~shoot^-1~d^-1*')'),
        tag = "(a)") +
   scale_fill_gradient(low="white", high=prismatic::clr_darken("#b2df8a", shift = 0.1),
                          breaks=c(0.0003,0.0011,0.0019),
@@ -251,7 +251,7 @@ phytointerpplot <- ggplot() +
   theme_classic() +
   labs(x= expression('P (TP '*mu*g~L^-1*')'),
        y= expression('N (NH'[4]^'+ '*mu*g~L^-1*')'),
-       fill = expression('Phytoplankton growth rate ('*mu*g~L^-1~hr^-1*')'),
+       fill = expression('Phytoplankton growth rate ('*mu*g~FW~L^-1~hr^-1*')'),
        tag = "(b)") +
   scale_fill_gradient(low="white", high="#1f78b4",
                                                breaks=c(0.001,0.0035,0.006),
@@ -284,201 +284,440 @@ ggsave(filename = "Fig3.jpeg", path="outputs", plot=fig3, device = "jpeg", width
 
 
 
-##Figures S1 & S2 ------------
+##Figures S1, S2, & S3 ------------
 #Plots of seagrass responses with nutrient treatments
-bladearean <- seagrassalldata %>%
-  ggplot(aes(x=ntrt, y=avgbladearea)) +
-  geom_point() + 
-  theme_classic() +
-  ylab(label=expression('Blade Area ('*mm^2~shoot^-1*')')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
-bladeareap <- seagrassalldata %>%
-  ggplot(aes(x=p, y=avgbladearea)) +
-  geom_point() + 
-  theme_classic() +
-  ylab(label=expression('Blade Area ('*mm^2~shoot^-1*')')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
 
-bladeheightn <- seagrassalldata %>%
-  ggplot(aes(x=ntrt, y=avgheight)) +
-  geom_point() + 
-  theme_classic() +
-  ylab(label=expression('Blade Height (mm)')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
-bladeheightp <- seagrassalldata %>%
-  ggplot(aes(x=p, y=avgheight)) +
-  geom_point() + 
-  theme_classic() +
-  ylab(label=expression('Blade Height (mm)')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
-
+#S1
 epsn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=avgepweightperarea)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('Epiphytes ('*g~mm^-2*')')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y=expression('Epiphytes ('*g~DW~mm^-2*')'),
+       tag = "A1")
 epsp <- seagrassalldata %>%
   ggplot(aes(x=p, y=avgepweightperarea)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('Epiphytes ('*g~mm^-2*')')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y=expression('Epiphytes ('*g~DW~mm^-2*')'),
+       tag = "A2")
+epsnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=avgepweightperarea)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y=expression('Epiphytes ('*g~DW~mm^-2*')'),
+       tag = "A3")
 
 bitesn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=avgbitespersa)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('Bites '*mm^-2)) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y=expression('Bites '*mm^-2),
+       tag = "B1")
 bitesp <- seagrassalldata %>%
   ggplot(aes(x=p, y=avgbitespersa)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('Bites '*mm^-2)) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y=expression('Bites '*mm^-2),
+       tag = "B2")
+bitesnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=avgbitespersa)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y=expression('Bites '*mm^-2),
+       tag = "B3")
 
 richn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=species)) +
-  geom_jitter(width = 0.008, height=0) +
+  geom_jitter(width = 0.02, height=0, size=3) +
   theme_classic() +
-  ylab(label=expression('Richness')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Richness',
+       tag = "C1")
 richp <- seagrassalldata %>%
   ggplot(aes(x=p, y=species)) +
-  geom_jitter(width = 0.002, height=0) +
+  geom_jitter(width = 0.002, height=0, size=3) +
   theme_classic() +
-  ylab(label=expression('Richness')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Richness',
+       tag = "C2")
+richnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=species)) +
+  geom_jitter(width = 0.002, height=0, size=3) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Richness',
+       tag = "C3")
 
 divn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=D)) +
-  geom_jitter(width = 0.008, height=0) +
+  geom_jitter(width = 0.02, height=0, size=3) +
   theme_classic() +
-  ylab(label=expression('Diversity')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Diversity',
+       tag = "D1")
 divp <- seagrassalldata %>%
   ggplot(aes(x=p, y=D)) +
-  geom_jitter(width = 0.002, height=0) +
+  geom_jitter(width = 0.002, height=0, size=3) +
   theme_classic() +
-  ylab(label=expression('Diversity')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Diversity',
+       tag = "D2")
+divnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=D)) +
+  geom_jitter(width = 0.002, height=0, size=3) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Diversity',
+       tag = "D3")
 
 shootsn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=tshoots)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('Shoots '*m^-2)) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y=expression('Shoots '*m^-2),
+       tag = "E1")
 shootsp <- seagrassalldata %>%
   ggplot(aes(x=p, y=tshoots)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('Shoots '*m^-2)) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y=expression('Shoots '*m^-2),
+       tag = "E2")
+shootsnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=tshoots)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y=expression('Shoots '*m^-2),
+       tag = "E3")
 
+#S2
 ccontn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=meanC)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('%C')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Seagrass %C',
+       tag = "A1")
 ccontp <- seagrassalldata %>%
   ggplot(aes(x=p, y=meanC)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('%C')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Seagrass %C',
+       tag = "A2")
+ccontnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=meanC)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Seagrass %C',
+       tag = "A3")
 
 ncontn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=meanN)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('%N')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Seagrass %N',
+       tag = "B1")
 ncontp <- seagrassalldata %>%
   ggplot(aes(x=p, y=meanN)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('%N')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Seagrass %N',
+       tag = "B2")
+ncontnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=meanN)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Seagrass %N',
+       tag = "B3")
 
 pcontn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=meanP)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('%P')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Seagrass %P',
+       tag = "C1")
 pcontp <- seagrassalldata %>%
   ggplot(aes(x=p, y=meanP)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('%P')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Seagrass %P',
+       tag = "C2")
+pcontnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=meanP)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Seagrass %P',
+       tag = "C3")
 
+#S3
 ctonn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=CN)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('C:N')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Seagrass C:N',
+       tag = "A1")
 ctonp <- seagrassalldata %>%
   ggplot(aes(x=p, y=CN)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('C:N')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Seagrass C:N',
+       tag = "A2")
+ctonnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=CN)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Seagrass C:N',
+       tag = "A3")
 
 ctopn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=CP)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('C:P')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Seagrass C:P',
+       tag = "B1")
 ctopp <- seagrassalldata %>%
   ggplot(aes(x=p, y=CP)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('C:P')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Seagrass C:P',
+       tag = "B2")
+ctopnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=CP)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Seagrass C:P',
+       tag = "B3")
 
 ntopn <- seagrassalldata %>%
   ggplot(aes(x=ntrt, y=NP)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('N:P')) +
-  xlab(label=expression('N ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y='Seagrass N:P',
+       tag = "C1")
 ntopp <- seagrassalldata %>%
   ggplot(aes(x=p, y=NP)) +
-  geom_point() + 
+  geom_point(size=3) + 
   theme_classic() +
-  ylab(label=expression('N:P')) +
-  xlab(label=expression('P ('*g~m^-2~d^-1*')'))
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y='Seagrass N:P',
+       tag = "C2")
+ntopnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=NP)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y='Seagrass N:P',
+       tag = "C3")
+
+bladearean <- seagrassalldata %>%
+  ggplot(aes(x=ntrt, y=avgbladearea)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y=expression('Blade Area ('*mm^2~shoot^-1*')'),
+       tag = "D1")
+bladeareap <- seagrassalldata %>%
+  ggplot(aes(x=p, y=avgbladearea)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y=expression('Blade Area ('*mm^2~shoot^-1*')'),
+       tag = "D2")
+bladeareanp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=avgbladearea)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y=expression('Blade Area ('*mm^2~shoot^-1*')'),
+       tag = "D3")
+
+bladeheightn <- seagrassalldata %>%
+  ggplot(aes(x=ntrt, y=avgheight)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +  
+  labs(x=expression('N ('*g~m^-2~d^-1*')'),
+       y=expression('Blade Height (mm)'),
+       tag = "E1")
+bladeheightp <- seagrassalldata %>%
+  ggplot(aes(x=p, y=avgheight)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x=expression('P ('*g~m^-2~d^-1*')'),
+       y=expression('Blade Height (mm)'),
+       tag = "E2")
+bladeheightnp <- seagrassalldata %>%
+  ggplot(aes(x=np, y=avgheight)) +
+  geom_point(size=3) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 15), 
+        axis.title = element_text(size = 16),
+        plot.tag = element_text(face = "bold", size=16)) +
+  labs(x='N:P',
+       y=expression('Blade Height (mm)'),
+       tag = "E2")
 
 
 quartz()
-figS1 <- ggpubr::ggarrange(ggarrange(epsn, epsp, labels = c("A1", "A2"), ncol = 2),
-                           ggarrange(bitesn, bitesp, labels = c("B1", "B2"), ncol = 2),
-                           ggarrange(richn, richp, labels = c("C1", "C2"), ncol = 2),
-                           ggarrange(divn, divp, labels = c("D1", "D2"), ncol = 2),
-                           ggarrange(shootsn, shootsp, labels = c("E1", "E2"), ncol = 2),
-                           ggarrange(ccontn, ccontp, labels = c("F1", "F2"), ncol = 2),
-                           ggarrange(ncontn, ncontp, labels = c("G1", "G2"), ncol = 2),
-                           ggarrange(pcontn, pcontp, labels = c("H1", "H2"), ncol = 2),
-                           nrow = 8)
+figS1 <- ggpubr::ggarrange(epsn, epsp, epsnp,
+                           bitesn, bitesp, bitesnp,
+                           richn, richp, richnp,
+                           divn, divp, divnp,
+                           shootsn, shootsp, shootsnp,
+                           ncol = 3, nrow = 5, align = "v")
+figS2 <- ggpubr::ggarrange(ccontn, ccontp, ccontnp,
+                           ncontn, ncontp, ncontnp,
+                           pcontn, pcontp, pcontnp,
+                           ncol = 3, nrow = 3, align = "v") 
+figS3 <- ggpubr::ggarrange(ctonn, ctonp, ctonnp,
+                           ctopn, ctopp, ctopnp,
+                           ntopn, ntopp, ntopnp,
+                           bladearean, bladeareap, bladeareanp,
+                           bladeheightn, bladeheightp, bladeheightnp, 
+                           ncol = 3, nrow = 5, align = "v") 
 
-figS2 <- ggpubr::ggarrange(ggarrange(ctonn, ctonp, labels = c("A1", "A2"), ncol = 2),
-                           ggarrange(ctopn, ctopp, labels = c("B1", "B2"), ncol = 2),
-                           ggarrange(ntopn, ntopp, labels = c("C1", "C2"), ncol = 2),
-                           ggarrange(bladearean, bladeareap, labels = c("D1", "D2"), ncol = 2),
-                           ggarrange(bladeheightn, bladeheightp, labels = c("E1", "E2"), ncol = 2),
-                           nrow = 5) 
-
-ggsave(filename = "FigS1.pdf", path="outputs", plot=figS1, device = "pdf", width = 8, height = 22, units="in", dpi=300)
-ggsave(filename = "FigS2.pdf", path="outputs", plot=figS2b, device = "pdf", width = 8, height = 16, units="in", dpi=300)
+ggsave(filename = "FigS1.pdf", path="outputs", plot=figS1, device = "pdf", width = 12, height = 16, units="in", dpi=300)
+ggsave(filename = "FigS2.pdf", path="outputs", plot=figS2, device = "pdf", width = 12, height = 10, units="in", dpi=300)
+ggsave(filename = "FigS3.pdf", path="outputs", plot=figS3, device = "pdf", width = 12, height = 16, units="in", dpi=300)
 
 
-##Figure S3 ------------
+##Figure S4 ------------
 #Plots of ammonium and phosphate (by day) in phytoplankton experiment
 
 nh4n <- wclongalldata %>%
@@ -507,13 +746,13 @@ srpp <- wclongalldata %>%
        y= expression('Soluble Reactive Phosphorus ('*mu*g~L^-1*')'),
        color= "Day")
 
-figS3 <- ggpubr::ggarrange(nh4n, srpp,
+figS4 <- ggpubr::ggarrange(nh4n, srpp,
                            labels = c("A", "B"),
                            ncol = 2, nrow = 1,
                            font.label = list(size = 20),
                            common.legend = T, legend = "bottom")
 
-ggsave(filename = "FigS3.pdf", path="outputs", plot=figS3, device = "pdf", width = 13, height = 6, units="in", dpi=300)
+ggsave(filename = "FigS4.pdf", path="outputs", plot=figS4, device = "pdf", width = 13, height = 6, units="in", dpi=300)
 
 
 
