@@ -11,6 +11,7 @@ library(nortest) #for testing model assumptions
 library(MuMIn) #for dredge
 library(mgcv) #for GAMs
 library(broom) #for AIC comparisons
+library(GGally) #for ggpairs
 
 
 
@@ -181,7 +182,7 @@ text(3,2,paste("lillie = ",round(lillie.test(rm)[[2]],3)),cex=2)
 ##Q1 analysis: Correlation tests -------
 
 corrplots1 <-  seagrassalldata %>%
-  select(avggrowthweight, avgbladearea, avgheight, avgepweightperarea, avgbitespersa, species, D, tshoots, sshoots) %>% 
+  select(avggrowthweight, avgbladearea, avgheight, avgepweightperarea, avgbitespersa, species, D, tshoots) %>% 
   ggpairs()
 
 corrplots2 <-  seagrassalldata %>%
@@ -190,7 +191,17 @@ corrplots2 <-  seagrassalldata %>%
 
 cor.test(seagrassalldata$avggrowthweight, seagrassalldata$avgbladearea, method = "pearson")
 cor.test(seagrassalldata$avggrowthweight, seagrassalldata$avgheight, method = "pearson")
-
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$avgepweightperarea, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$avgbitespersa, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$species, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$D, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$tshoots, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$meanC, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$meanN, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$meanP, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$CN, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$CP, method = "pearson")
+cor.test(seagrassalldata$avggrowthweight, seagrassalldata$NP, method = "pearson")
 
 
 
